@@ -19,10 +19,21 @@ const accountSchema = yup.object().shape({
 })
 
 exports.checkAccountPayload = async (req, res, next) => {
+  const error = { status: 400 }
   try {
     const validated = await accountSchema.validate(req.body)
     req.body = validated
-    next()
+    const { name, budget } = req.body
+    if (typeof name !== 'string') {
+      error.message = 'name of account must be a string'
+      next(error)
+    }
+    else if (typeof budget !== 'number') {
+      error.message = 'budget of account must be a number'
+      next(error)
+    } else {
+      next()
+    }
   } catch (err) {
     next({
       status: 400,
