@@ -15,7 +15,7 @@ router.get('/:id', checkAccountId, (req, res) => {
   res.status(200).json(req.found)
 })
 
-router.post('/', checkAccountPayload, async (req, res, next) => {
+router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
   try {
     const newAcc = await Account.create(req.body)
     res.status(201).json(newAcc)
